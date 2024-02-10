@@ -3,6 +3,7 @@ package com.core.appbackend.service.Inscription;
 import com.core.appbackend.beans.Inscription;
 import com.core.appbackend.repository.Inscription.InscriptionRepositoryInterace;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,7 +14,7 @@ public class InscriptionService {
     InscriptionRepositoryInterace inscriptionRepository;
 
     public Iterable<Inscription> findAllInscription(){
-        return inscriptionRepository.findAll();
+        return inscriptionRepository.findAll(Sort.by(Sort.Direction.DESC,"inscriptionId"));
     }
 
     public Inscription findInscriptionById(Long id){
