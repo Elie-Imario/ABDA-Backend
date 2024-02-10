@@ -14,8 +14,16 @@ public class Inscription {
     @Column(name = "inscription_id")
     private Long inscriptionId;
     private String matricule;
-    private String Nom;
+    private String nom;
     private Long droitInscription;
+
+    public Inscription() {}
+
+    public Inscription(String matricule, String nom, Long droitInscription) {
+        this.matricule = matricule;
+        this.nom = nom;
+        this.droitInscription = droitInscription;
+    }
 
     public Long getInscriptionId() {
         return inscriptionId;
@@ -34,11 +42,11 @@ public class Inscription {
     }
 
     public String getNom() {
-        return Nom;
+        return nom;
     }
 
     public void setNom(String nom) {
-        Nom = nom;
+        this.nom = nom;
     }
 
     public Long getDroitInscription() {
