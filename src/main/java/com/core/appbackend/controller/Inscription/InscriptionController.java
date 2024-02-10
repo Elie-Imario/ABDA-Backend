@@ -56,6 +56,21 @@ public class InscriptionController {
         }
     }
 
+    @PutMapping("/inscriptions/{id}")
+    public ResponseEntity<Inscription> updateInscription(@PathVariable("id") Long id, @RequestBody Inscription inscription){
+        try{
+            Inscription fetchedInscription = inscriptionService.findInscriptionById(id);
+            fetchedInscription.setMatricule(inscription.getMatricule());
+            fetchedInscription.setNom(inscription.getNom());
+            fetchedInscription.setDroitInscription(inscription.getDroitInscription());
+
+            Inscription UpdatedInscrption = inscriptionService.updateInscription(fetchedInscription);
+            return new ResponseEntity<>(UpdatedInscrption, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @DeleteMapping("/inscriptions/{id}")
     public ResponseEntity<HttpStatus> deleteInscription(@PathVariable("id") Long id){
         try {

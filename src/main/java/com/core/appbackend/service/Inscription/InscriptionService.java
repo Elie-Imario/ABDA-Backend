@@ -23,6 +23,10 @@ public class InscriptionService {
     public Inscription addInscription(Inscription inscription){
         return inscriptionRepository.save(inscription);
     }
+
+    public Inscription updateInscription(Inscription inscription){
+        return inscriptionRepository.save(inscription);
+    }
     public void deleteInscriptionById(Long id){
         inscriptionRepository.deleteById(id);
     }
