@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/inscription")
+@RequestMapping("/api")
 public class InscriptionController {
     @Autowired
     InscriptionService inscriptionService;
 
-    @GetMapping
+    @GetMapping("/inscriptions")
     public ResponseEntity<List<Inscription>>  getAllInscription(){
         try{
             List<Inscription> inscriptions = new ArrayList<Inscription>();
@@ -33,7 +33,7 @@ public class InscriptionController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/inscription")
     public ResponseEntity<Inscription> createInscription(@RequestBody Inscription inscription){
         try{
             Inscription newInscription = inscriptionService.addInscription(new Inscription(
@@ -44,4 +44,15 @@ public class InscriptionController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @DeleteMapping("/inscriptions/{id}")
+    public ResponseEntity<Inscription> deleteInscription(@PathVariable("id") Long id){
+        try {
+            inscriptionService.deleteInscriptionById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
