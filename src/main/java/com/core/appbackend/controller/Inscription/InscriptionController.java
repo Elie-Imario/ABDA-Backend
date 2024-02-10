@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -45,8 +46,18 @@ public class InscriptionController {
         }
     }
 
+    @GetMapping("/inscriptions/{id}")
+    public ResponseEntity<Inscription> getInscriptionById(@PathVariable("id") Long id){
+        try{
+            Inscription inscription = inscriptionService.findInscriptionById(id);
+            return new ResponseEntity<>(inscription, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        }
+    }
+
     @DeleteMapping("/inscriptions/{id}")
-    public ResponseEntity<Inscription> deleteInscription(@PathVariable("id") Long id){
+    public ResponseEntity<HttpStatus> deleteInscription(@PathVariable("id") Long id){
         try {
             inscriptionService.deleteInscriptionById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
