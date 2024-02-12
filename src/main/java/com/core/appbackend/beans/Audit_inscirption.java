@@ -2,25 +2,24 @@ package com.core.appbackend.beans;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity(name = "audit_inscription")
 public class Audit_inscirption {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "id_audit_inscription_key_generator")
-    @TableGenerator(name = "id_audit_inscription_key_generator",
-            table = "pk_audit_inscription",
-            pkColumnName = "name",
-            valueColumnName = "value",
-            allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "audit_id")
     private Long auditId;
+
+    private String actionType;
     private String matricule;
     private String nom;
     private Long oldDroitInscription;
     private Long newDroitInscription;
-    private Date EditedAt;
-    private String Utilisateur;
+    @Column(columnDefinition = "timestamp default current_timestamp")
+    private LocalDateTime editedAt;
+    private String utilisateur;
 
     public Long getAuditId() {
         return auditId;
@@ -28,6 +27,14 @@ public class Audit_inscirption {
 
     public void setAuditId(Long auditId) {
         this.auditId = auditId;
+    }
+
+    public String getActionType() {
+        return actionType;
+    }
+
+    public void setActionType(String actionType) {
+        this.actionType = actionType;
     }
 
     public String getMatricule() {
@@ -62,19 +69,19 @@ public class Audit_inscirption {
         this.newDroitInscription = newDroitInscription;
     }
 
-    public Date getEditedAt() {
-        return EditedAt;
+    public LocalDateTime getEditedAt() {
+        return editedAt;
     }
 
     public void setEditedAt(Date editedAt) {
-        EditedAt = editedAt;
+        editedAt = editedAt;
     }
 
     public String getUtilisateur() {
-        return Utilisateur;
+        return utilisateur;
     }
 
     public void setUtilisateur(String utilisateur) {
-        Utilisateur = utilisateur;
+        utilisateur = utilisateur;
     }
 }
