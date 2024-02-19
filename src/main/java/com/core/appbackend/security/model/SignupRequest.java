@@ -5,9 +5,12 @@ public class SignupRequest {
 
     private String password;
 
-    public SignupRequest(String userName, String password) {
+    private String role;
+
+    public SignupRequest(String userName, String password, String role) {
         this.userName = userName;
         this.password = password;
+        this.role = role;
     }
 
     public String getUserName() {
@@ -16,5 +19,9 @@ public class SignupRequest {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getRole() {
+        return role;
     }
 }

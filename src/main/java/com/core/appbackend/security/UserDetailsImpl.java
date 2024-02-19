@@ -3,9 +3,12 @@ package com.core.appbackend.security;
 import com.core.appbackend.beans.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Contient les informations necessaire pour construire un objet d'authentification
@@ -18,15 +21,25 @@ public class UserDetailsImpl implements UserDetails {
     @JsonIgnore
     private String password;
 
-    public UserDetailsImpl(Long userId, String userName, String password) {
-        this.id = userId;
-        this.username = userName;
+    private Collection<? extends GrantedAuthority> authorities;
+
+    public UserDetailsImpl(Long id,String username, String password, Collection<? extends GrantedAuthority> authorities) {
+        this.id = id;
+        this.username = username;
         this.password = password;
+        this.authorities = authorities;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
+    }
+
+
+    private static List<GrantedAuthority> getGrantedAuthorities(String role) {
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+        return authorities;
     }
 
     @Override
@@ -63,7 +76,9 @@ public class UserDetailsImpl implements UserDetails {
         return new UserDetailsImpl(
                 user.getUserId(),
                 user.getUserName(),
-                user.getPassword()
+                user.getPassword(),
+                getGrantedAuthorities(user.getRole())
         );
     }
+
 }

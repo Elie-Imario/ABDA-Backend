@@ -4,10 +4,15 @@ import com.core.appbackend.beans.User;
 import com.core.appbackend.repository.User.UserDetailRepositoryInterface;
 import com.core.appbackend.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -22,3 +27,4 @@ public class UserDetailServiceImpl implements UserDetailsService {
         return UserDetailsImpl.build(user);
     }
 }
+
