@@ -2,6 +2,9 @@ package com.core.appbackend.beans;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity(name = "utilisateur")
 public class User {
     @Id
@@ -17,10 +20,15 @@ public class User {
     private String userName;
     private String password;
 
+    private String role;
+
+
     public User() {}
-    public User(String userName, String password) {
+
+    public User(String userName, String password, String role) {
         this.userName = userName;
         this.password = password;
+        this.role = role;
     }
 
     public Long getUserId() {
@@ -45,5 +53,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
