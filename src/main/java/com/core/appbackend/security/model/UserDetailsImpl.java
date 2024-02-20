@@ -1,4 +1,4 @@
-package com.core.appbackend.security;
+package com.core.appbackend.security.model;
 
 import com.core.appbackend.beans.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;

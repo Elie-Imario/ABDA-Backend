@@ -1,6 +1,7 @@
 package com.core.appbackend.controller.Auth;
 
-import com.core.appbackend.security.UserDetailsImpl;
+import com.core.appbackend.security.jwt.JwtUtil;
+import com.core.appbackend.security.model.UserDetailsImpl;
 import com.core.appbackend.security.model.LoginRequest;
 import com.core.appbackend.beans.User;
 import com.core.appbackend.security.model.SignupRequest;
@@ -13,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +37,9 @@ public class AuthControlller {
     @Autowired
     UserService userService;
 
+    @Autowired
+    JwtUtil jwtUtil;
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest){
         try {
@@ -42,14 +47,19 @@ public class AuthControlller {
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getUserName(), loginRequest.getPassword());
 
+
             Authentication authentication =
                     authenticationManager.authenticate(loginCredentials);
 
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtil.generateJwtToken(authentication);
+
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-            return new ResponseEntity(userDetails.getUsername(), HttpStatus.OK);
+            return new ResponseEntity(jwt, HttpStatus.OK);
         }catch (BadCredentialsException e){
             return new ResponseEntity(e.getMessage(), HttpStatus.FORBIDDEN);
         }catch (Exception e){
+            e.printStackTrace();
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -60,7 +70,7 @@ public class AuthControlller {
             if (userService.existsByUsername(signUpRequest.getUserName())) {
                 return new ResponseEntity<>("User already exist", HttpStatus.BAD_REQUEST);
             }
-            User newUser = userService.createUser(new User(signUpRequest.getUserName(), encoder.encode(signUpRequest.getPassword())));
+            User newUser = userService.createUser(new User(signUpRequest.getUserName(), encoder.encode(signUpRequest.getPassword()), signUpRequest.getRole()));
             return new ResponseEntity(newUser, HttpStatus.CREATED);
         }catch (Exception e){
             return ResponseEntity.internalServerError().build();
