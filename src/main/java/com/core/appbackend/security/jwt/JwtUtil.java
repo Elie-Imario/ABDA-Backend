@@ -4,13 +4,11 @@ package com.core.appbackend.security.jwt;
 import com.core.appbackend.security.model.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
 
@@ -25,10 +23,11 @@ public class JwtUtil {
 
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
+
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -37,14 +36,7 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
     }
 
-    private String generateSafeToken() {
-        SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-        return Encoders.BASE64.encode(key.getEncoded());
-    }
-
-
     public String getUserNameFromJwtToken(String token) {
-        //return Jwts.parser().setSigningKey(key()).build().parseClaimsJws(token).getBody().getSubject();
         return Jwts.parser().setSigningKey(secretKey).build().parseSignedClaims(token).getBody().getSubject();
     }
 
