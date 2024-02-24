@@ -4,7 +4,9 @@ import com.core.appbackend.beans.Inscription;
 import com.core.appbackend.repository.Inscription.InscriptionRepositoryInterace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class InscriptionService {
@@ -16,7 +18,7 @@ public class InscriptionService {
     }
 
     public Inscription findInscriptionById(Long id){
-        return inscriptionRepository.findById(id).orElseThrow();
+        return inscriptionRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     public Inscription addInscription(Inscription inscription){
