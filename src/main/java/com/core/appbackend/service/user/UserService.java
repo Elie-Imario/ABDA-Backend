@@ -1,7 +1,6 @@
 package com.core.appbackend.service.user;
 
 import com.core.appbackend.beans.User;
-import com.core.appbackend.repository.User.UserDetailRepositoryInterface;
 import com.core.appbackend.repository.User.UserRepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

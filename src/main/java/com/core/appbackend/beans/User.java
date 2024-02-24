@@ -2,9 +2,6 @@ package com.core.appbackend.beans;
 
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity(name = "utilisateur")
 public class User {
     @Id
