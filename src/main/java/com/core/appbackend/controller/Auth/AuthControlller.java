@@ -1,5 +1,6 @@
 package com.core.appbackend.controller.Auth;
 
+import com.core.appbackend.security.authResponse.authResponse;
 import com.core.appbackend.security.jwt.JwtUtil;
 import com.core.appbackend.security.model.UserDetailsImpl;
 import com.core.appbackend.security.model.LoginRequest;
@@ -15,11 +16,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -40,6 +39,7 @@ public class AuthControlller {
     @Autowired
     JwtUtil jwtUtil;
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest){
         try {
@@ -55,7 +55,7 @@ public class AuthControlller {
             String jwt = jwtUtil.generateJwtToken(authentication);
 
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-            return new ResponseEntity(jwt, HttpStatus.OK);
+            return new ResponseEntity(new authResponse(userDetails.getUsername(), userDetails.getAuthorities(), jwt), HttpStatus.OK);
         }catch (BadCredentialsException e){
             return new ResponseEntity(e.getMessage(), HttpStatus.FORBIDDEN);
         }catch (Exception e){
@@ -64,6 +64,7 @@ public class AuthControlller {
         }
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest signUpRequest) {
         try {
