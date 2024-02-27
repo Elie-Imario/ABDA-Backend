@@ -55,7 +55,7 @@ public class AuthControlller {
             String jwt = jwtUtil.generateJwtToken(authentication);
 
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-            return new ResponseEntity(new authResponse(userDetails.getUsername(), userDetails.getAuthorities(), jwt), HttpStatus.OK);
+            return new ResponseEntity(new authResponse(userDetails.getUsername(), userDetails.getAuthorities(), jwt, HttpStatus.OK), HttpStatus.OK);
         }catch (BadCredentialsException e){
             return new ResponseEntity(e.getMessage(), HttpStatus.FORBIDDEN);
         }catch (Exception e){
