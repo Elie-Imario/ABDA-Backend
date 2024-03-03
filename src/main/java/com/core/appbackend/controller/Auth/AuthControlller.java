@@ -16,7 +16,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,14 +38,12 @@ public class AuthControlller {
     @Autowired
     JwtUtil jwtUtil;
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest){
         try {
             UsernamePasswordAuthenticationToken loginCredentials =
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getUserName(), loginRequest.getPassword());
-
 
             Authentication authentication =
                     authenticationManager.authenticate(loginCredentials);
@@ -57,23 +54,22 @@ public class AuthControlller {
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             return new ResponseEntity(new authResponse(userDetails.getUsername(), userDetails.getAuthorities(), jwt, HttpStatus.OK), HttpStatus.OK);
         }catch (BadCredentialsException e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.FORBIDDEN);
+            return new ResponseEntity(new authResponse(HttpStatus.FORBIDDEN, "Les informations saisies sont incorrectes"), HttpStatus.FORBIDDEN);
         }catch (Exception e){
-            e.printStackTrace();
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(new authResponse(HttpStatus.INTERNAL_SERVER_ERROR, "une erreur s'est produite, veuillez réessayer ultérieurement"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest signUpRequest) {
         try {
             if (userService.existsByUsername(signUpRequest.getUserName())) {
-                return new ResponseEntity<>("User already exist", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new authResponse(HttpStatus.BAD_REQUEST, "Ce compte existe déjà!"), HttpStatus.BAD_REQUEST);
             }
             User newUser = userService.createUser(new User(signUpRequest.getUserName(), encoder.encode(signUpRequest.getPassword()), signUpRequest.getRole()));
             return new ResponseEntity(newUser, HttpStatus.CREATED);
         }catch (Exception e){
+            e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
     }

@@ -17,7 +17,6 @@ import java.util.List;
 public class AuditController {
     @Autowired
     AuditInscriptionServiceImpl auditInscriptionService;
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/audit_inscriptions")
     public ResponseEntity<?> getAllAudit(){
         try{
@@ -33,7 +32,6 @@ public class AuditController {
         }
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/RevisionTypeDetails")
     public ResponseEntity<List<?>> RevisionTypeDetails(){
         try{

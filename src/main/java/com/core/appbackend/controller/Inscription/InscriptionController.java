@@ -17,7 +17,6 @@ public class InscriptionController {
     @Autowired
     InscriptionService inscriptionService;
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/inscriptions")
     public ResponseEntity<List<Inscription>>  getAllInscription(){
         try{
@@ -34,8 +33,6 @@ public class InscriptionController {
         }
     }
 
-
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/inscription")
     public ResponseEntity<?> createInscription(@RequestBody Inscription inscription){
         try{
@@ -48,7 +45,6 @@ public class InscriptionController {
         }
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/inscriptions/{id}")
     public ResponseEntity<Inscription> getInscriptionById(@PathVariable("id") Long id){
         try{
@@ -59,7 +55,6 @@ public class InscriptionController {
         }
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PutMapping("/inscriptions/{id}")
     public ResponseEntity<?> updateInscription(@PathVariable("id") Long id, @RequestBody Inscription inscription){
         try{
@@ -75,7 +70,6 @@ public class InscriptionController {
         }
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/inscriptions/{id}")
     public ResponseEntity<?> deleteInscription(@PathVariable("id") Long id){
         try {
