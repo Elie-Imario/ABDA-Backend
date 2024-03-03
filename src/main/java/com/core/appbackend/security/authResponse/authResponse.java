@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
-import java.util.List;
 
 public class authResponse {
     private String userName;
@@ -13,11 +12,18 @@ public class authResponse {
 
     private HttpStatus responseStatus;
 
+    private String responseMessage;
+
     public authResponse(String userName, Collection<? extends GrantedAuthority> authorities, String jwtToken, HttpStatus responseStatus) {
         this.userName = userName;
         this.authorities = authorities;
         this.jwtToken = jwtToken;
         this.responseStatus = responseStatus;
+    }
+
+    public authResponse(HttpStatus responseStatus, String responseMessage) {
+        this.responseStatus = responseStatus;
+        this.responseMessage = responseMessage;
     }
 
     public String getUserName() {
@@ -50,5 +56,13 @@ public class authResponse {
 
     public void setResponseStatus(HttpStatus responseStatus) {
         this.responseStatus = responseStatus;
+    }
+
+    public String getResponseMessage() {
+        return responseMessage;
+    }
+
+    public void setResponseMessage(String responseMessage) {
+        this.responseMessage = responseMessage;
     }
 }
