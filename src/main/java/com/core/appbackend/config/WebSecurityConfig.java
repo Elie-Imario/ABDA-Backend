@@ -1,15 +1,14 @@
 package com.core.appbackend.config;
 
-import com.core.appbackend.playload.response.logoutResponse;
+import com.core.appbackend.playload.response.LogoutResponse;
 import com.core.appbackend.security.filter.AuthTokenFilter;
 import com.core.appbackend.security.jwt.AuthEntryPointJwt;
 import com.core.appbackend.service.user.UserDetailServiceImpl;
-import jakarta.servlet.http.HttpServletRequest;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -25,6 +24,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 
 @Configuration
@@ -58,6 +58,12 @@ public class WebSecurityConfig{
                                         .invalidateHttpSession(true)
                                         .logoutSuccessHandler((request, response, authentication) -> {
                                             SecurityContextHolder.clearContext();
+
+                                            String JsonResponse = new Gson().toJson(new LogoutResponse(HttpStatus.OK, "Déconnexion reussie"));
+
+                                            response.setContentType("application/json");
+                                            response.setCharacterEncoding("UTF-8");
+                                            response.getWriter().write(JsonResponse);
                                         });
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
